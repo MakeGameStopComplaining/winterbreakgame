@@ -6,6 +6,7 @@ class Arena extends Phaser.Scene {
 
     preload() {
         this.load.image("ant", "assets/image/ant.png");
+        this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
     }
 
     create() {
@@ -21,6 +22,8 @@ class Arena extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         
         this.projectiles = this.physics.add.group();
+        
+        this.anteaters = this.physics.add.group();
         
         this.physics.world.setBounds(0, 0, 960, 540);
         this.cameras.main.setBounds(0, 0, 960, 540);
@@ -44,6 +47,14 @@ class Arena extends Phaser.Scene {
         /*this.music = this.sound.add("mainMusic");
         this.music.loop = true;
         this.music.play();*/
+        
+        this.anims.create({
+            key: "anteaterWalk",
+            frames: this.anims.generateFrameNumbers("anteater",
+                {start: 0, end: 3}),
+            frameRate: 8,
+            repeat: -1
+        });
         
     }
 
@@ -83,6 +94,17 @@ class Arena extends Phaser.Scene {
         
         while (garbageDump.length > 0) {
             garbageDump.pop().destroy();
+        }
+        
+        if (this.internalClock % 180 == 0) {
+            var anteater = this.anteaters.create(810, 500, "anteater");
+            anteater.play("anteaterWalk", true);
+            console.log("anyeater");
+            anteater.flipX = true;
+            anteater.setVelocityX(-100);
+            anteater.setScale(2);
+            anteater.setGravityY(1200);
+            anteater.setCollideWorldBounds(true);
         }
     }
 
