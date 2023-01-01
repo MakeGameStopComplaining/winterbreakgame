@@ -7,6 +7,7 @@ class Arena extends Phaser.Scene {
     preload() {
         this.load.image("ant", "assets/image/ant.png");
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
+        this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
     }
 
     create() {
@@ -24,6 +25,11 @@ class Arena extends Phaser.Scene {
         this.projectiles = this.physics.add.group();
         
         this.anteaters = this.physics.add.group();
+        
+        this.fortress = this.physics.add.sprite(100, 200, "antHill");
+        this.fortress.setScale(2);
+        this.fortress.setCollideWorldBounds(true);
+        this.fortress.setGravityY(1200);
         
         this.physics.world.setBounds(0, 0, 960, 540);
         this.cameras.main.setBounds(0, 0, 960, 540);
@@ -55,6 +61,14 @@ class Arena extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
+        this.anims.create({
+            key: "antHillWave",
+            frames: this.anims.generateFrameNumbers("antHill",
+                {start: 0, end: 1}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.fortress.play("antHillWave", true);
         
     }
 
