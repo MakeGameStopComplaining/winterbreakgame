@@ -29,6 +29,12 @@ class Arena extends Phaser.Scene {
         this.garbageDump = [];
         
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.buttons = {
+            w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        };
         
         this.clicka = this.input.activePointer;
         this.canClick = false;
@@ -42,13 +48,13 @@ class Arena extends Phaser.Scene {
     }
 
     update() {
-        if (this.cursors.left.isDown) {
+        if (this.buttons.a.isDown) {
             this.player.setVelocityX(-333);
         }
-        if (this.cursors.right.isDown) {
+        if (this.buttons.d.isDown) {
             this.player.setVelocityX(333);
         }
-        if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
+        if (Phaser.Input.Keyboard.JustDown(this.buttons.w)) {
             this.player.setVelocityY(-543.21);
         }
         /* (this.cursors.down.isDown) {
