@@ -16,6 +16,7 @@ class Arena extends Phaser.Scene {
         
         var graphics = this.add.graphics();
         graphics.fillGradientStyle(0x00d8ff, 0x00d8ff, 0x003ebd, 0x003ebd, 1);
+        graphics.fillRect(0, 0, 960, 540);
         
         this.player = this.physics.add.sprite(69, -69, "ant");
         this.player.setGravityY(1200);
