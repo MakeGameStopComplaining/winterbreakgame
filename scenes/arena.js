@@ -5,7 +5,7 @@ class Arena extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("ant", "assets/image/ant.png");
+        this.load.spritesheet("ant", "assets/image/gun_base.png", { frameWidth: 37, frameHeight: 50 });
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
         this.load.audio("blast", "assets/sounds/shot.wav");
@@ -19,6 +19,7 @@ class Arena extends Phaser.Scene {
         graphics.fillRect(0, 0, 960, 540);
         
         this.player = this.physics.add.sprite(69, -69, "ant");
+        this.player.setScale(2);
         this.player.setGravityY(1200);
         this.player.setDragX(543.21);
         this.player.setDragY(333);
@@ -76,6 +77,14 @@ class Arena extends Phaser.Scene {
             repeat: -1
         });
         this.fortress.play("antHillWave", true);
+        this.anims.create({
+            key: "antChillin",
+            frames: this.anims.generateFrameNumbers("ant",
+                {start: 0, end: 1}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.player.play("antChillin", true);
         
     }
 
@@ -111,7 +120,7 @@ class Arena extends Phaser.Scene {
             this.canClick = true;
         }
         
-        this.player.flipX = relClickX < this.player.x;
+        this.player.flipX = relClickX >= this.player.x;
         
         var garbageDump = this.garbageDump;
         
