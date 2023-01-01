@@ -14,6 +14,6 @@ var game = new Phaser.Game({
         target: 60,
         forceSetTimeOut: true
     },
-    scene: [Arena],
+    scene: [StudioLogo, Arena],
     pixelArt: true
 });

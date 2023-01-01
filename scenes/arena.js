@@ -7,6 +7,8 @@ class Arena extends Phaser.Scene {
     preload() {
         this.load.image("ant", "assets/image/ant.png");
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
+        this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.audio("blast", "assets/sounds/shot.wav");
     }
 
     create() {
@@ -14,6 +16,7 @@ class Arena extends Phaser.Scene {
         
         var graphics = this.add.graphics();
         graphics.fillGradientStyle(0x00d8ff, 0x00d8ff, 0x003ebd, 0x003ebd, 1);
+        graphics.fillRect(0, 0, 960, 540);
         
         this.player = this.physics.add.sprite(69, -69, "ant");
         this.player.setGravityY(1200);
@@ -25,11 +28,21 @@ class Arena extends Phaser.Scene {
         
         this.anteaters = this.physics.add.group();
         
+        this.fortress = this.physics.add.sprite(100, 200, "antHill");
+        this.fortress.setScale(2);
+        this.fortress.setCollideWorldBounds(true);
+        this.fortress.setGravityY(1200);
+        
         this.physics.world.setBounds(0, 0, 960, 540);
         this.cameras.main.setBounds(0, 0, 960, 540);
         this.cameras.main.startFollow(this.player);
         
         this.garbageDump = [];
+        
+        this.physics.add.overlap(this.projectiles, this.anteaters, function(projectile, enemy) {
+            this.garbageDump.push(projectile);
+            this.garbageDump.push(enemy);
+        }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
         this.buttons = {
@@ -55,6 +68,14 @@ class Arena extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
+        this.anims.create({
+            key: "antHillWave",
+            frames: this.anims.generateFrameNumbers("antHill",
+                {start: 0, end: 1}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.fortress.play("antHillWave", true);
         
     }
 
@@ -83,6 +104,8 @@ class Arena extends Phaser.Scene {
             ball.setVelocityX(Math.cos(ball.rotation) * 1000);
             ball.setVelocityY(Math.sin(ball.rotation) * 1000);
             console.log("ball");
+            var sound = this.sound.add("blast");
+            sound.play();
         }
         else if (!this.clicka.isDown) {
             this.canClick = true;
