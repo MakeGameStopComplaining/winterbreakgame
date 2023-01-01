@@ -20,6 +20,8 @@ class Arena extends Phaser.Scene {
         this.player.setDragY(333);
         this.player.setCollideWorldBounds(true);
         
+        this.projectiles = this.physics.add.group();
+        
         this.physics.world.setBounds(0, 0, 960, 540);
         this.cameras.main.setBounds(0, 0, 960, 540);
         this.cameras.main.startFollow(this.player);
@@ -57,9 +59,13 @@ class Arena extends Phaser.Scene {
         
         var relClickX = this.clicka.x + this.cameras.main.scrollX;
         
-        if (this.clicka.isDown && this.canClick && this.player.y > 21 && this.stunFrames == 0) {
+        if (this.clicka.isDown && this.canClick) {
             this.canClick = false;
-            
+            var ball = this.projectiles.create(this.player.x, this.player.y, "ball");
+            ball.rotation = Math.atan2(this.clicka.y - this.player.y, relClickX - this.player.x);
+            ball.setVelocityX(Math.cos(ball.rotation) * 1000);
+            ball.setVelocityY(Math.sin(ball.rotation) * 1000);
+            console.log("ball");
         }
         else if (!this.clicka.isDown) {
             this.canClick = true;
