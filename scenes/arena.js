@@ -16,7 +16,7 @@ class Arena extends Phaser.Scene {
         
         this.player = this.physics.add.sprite(69, -69, "ant");
         this.player.setGravityY(1200);
-        this.player.setDragX(333);
+        this.player.setDragX(543.21);
         this.player.setDragY(333);
         this.player.setCollideWorldBounds(true);
         
@@ -41,17 +41,17 @@ class Arena extends Phaser.Scene {
 
     update() {
         if (this.cursors.left.isDown) {
-            this.player.body.x-=10;
+            this.player.setVelocityX(-333);
         }
         if (this.cursors.right.isDown) {
-            this.player.body.x+=10;
+            this.player.setVelocityX(333);
         }
-        if (this.cursors.up.isDown) {
-            this.player.body.y-=10;
+        if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
+            this.player.setVelocityY(-543.21);
         }
-        if (this.cursors.down.isDown) {
+        /* (this.cursors.down.isDown) {
             this.player.body.y+=10;
-        }
+        }*/
         
         this.internalClock++;
         
