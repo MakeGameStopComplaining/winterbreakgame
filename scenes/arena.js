@@ -8,6 +8,7 @@ class Arena extends Phaser.Scene {
         this.load.image("ant", "assets/image/ant.png");
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.audio("blast", "assets/sounds/shot.wav");
     }
 
     create() {
@@ -102,6 +103,8 @@ class Arena extends Phaser.Scene {
             ball.setVelocityX(Math.cos(ball.rotation) * 1000);
             ball.setVelocityY(Math.sin(ball.rotation) * 1000);
             console.log("ball");
+            var sound = this.sound.add("blast");
+            sound.play();
         }
         else if (!this.clicka.isDown) {
             this.canClick = true;
