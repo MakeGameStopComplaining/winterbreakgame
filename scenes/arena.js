@@ -152,7 +152,7 @@ class Arena extends Phaser.Scene {
         if (this.buttons.d.isDown) {
             this.player.setVelocityX(333);
         }
-        if (Phaser.Input.Keyboard.JustDown(this.buttons.w)) {
+        if (Phaser.Input.Keyboard.JustDown(this.buttons.w) && this.player.body.blocked.down) {
             this.player.setVelocityY(-543.21);
             var sound = this.sound.add("jump");
             sound.play();
