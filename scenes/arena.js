@@ -25,7 +25,7 @@ class Arena extends Phaser.Scene {
         this.floor.setCollideWorldBounds(true);
 
         
-        this.player = this.physics.add.sprite(69, -69, "ant");
+        this.player = this.physics.add.sprite(321, -69, "ant");
         this.player.setScale(2);
         this.player.setGravityY(1200);
         this.player.setDragX(543.21);
@@ -39,7 +39,7 @@ class Arena extends Phaser.Scene {
         this.physics.add.collider(this.anteaters, this.floor);
 
         
-        this.fortress = this.physics.add.sprite(100, 200, "antHill");
+        this.fortress = this.physics.add.sprite(200, 200, "antHill");
         this.fortress.setScale(2);
         this.fortress.setCollideWorldBounds(true);
         this.fortress.setGravityY(1200);
@@ -173,7 +173,7 @@ class Arena extends Phaser.Scene {
         }
         
         if (this.internalClock % 180 == 0) {
-            var anteater = this.anteaters.create(810, 100, "anteater");
+            var anteater = this.anteaters.create(899, 30, "anteater");
             anteater.play("anteaterWalk", true);
             console.log("anyeater");
             anteater.flipX = true;
