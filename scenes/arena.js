@@ -61,6 +61,16 @@ class Arena extends Phaser.Scene {
             this.garbageDump.push(enemy);
         }.bind(this), null, this);
         
+        this.physics.add.overlap(this.player, this.anteaters, function(player, enemy) {
+            if (player.body.velocity.y > 100) {
+                this.garbageDump.push(enemy);
+                this.player.setVelocityY(-333);
+            }
+            else {
+                this.scene.pause();
+            }
+        }.bind(this), null, this);
+        
         this.cursors = this.input.keyboard.createCursorKeys();
         this.buttons = {
             w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
