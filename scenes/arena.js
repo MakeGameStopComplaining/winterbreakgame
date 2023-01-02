@@ -8,6 +8,7 @@ class Arena extends Phaser.Scene {
         this.load.spritesheet("ant", "assets/image/gun_base.png", { frameWidth: 37, frameHeight: 50 });
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet("maxim", "assets/image/ant_gun.png", { frameWidth: 96, frameHeight: 32 });
         this.load.audio("blast", "assets/sounds/shot.wav");
     }
 
@@ -33,6 +34,11 @@ class Arena extends Phaser.Scene {
         this.fortress.setScale(2);
         this.fortress.setCollideWorldBounds(true);
         this.fortress.setGravityY(1200);
+        
+        this.firearm = this.physics.add.sprite(this.player.x, this.player.y, "maxim");
+        this.firearm.setScale(2);
+        this.firearm.flipX = true;
+        this.firearm.setDepth(5);
         
         this.physics.world.setBounds(0, 0, 960, 540);
         this.cameras.main.setBounds(0, 0, 960, 540);
@@ -85,6 +91,16 @@ class Arena extends Phaser.Scene {
             repeat: -1
         });
         this.player.play("antChillin", true);
+        this.anims.create({
+            key: "fire",
+            frames: this.anims.generateFrameNumbers("maxim",
+                {start: 0, end: 4}),
+            frameRate: 8,
+            repeat: 0
+        });
+        this.firearm.on("animationcomplete", function() {
+            this.setTexture("maxim", 0);
+        });
         
     }
 
@@ -115,12 +131,19 @@ class Arena extends Phaser.Scene {
             console.log("ball");
             var sound = this.sound.add("blast");
             sound.play();
+            this.firearm.play("fire", false);
         }
         else if (!this.clicka.isDown) {
             this.canClick = true;
         }
         
         this.player.flipX = relClickX >= this.player.x;
+        
+        this.firearm.x = this.player.x; this.firearm.y = this.player.y;
+        this.firearm.rotation = Math.atan2(this.clicka.y - this.player.y, relClickX - this.player.x);
+        this.firearm.x += Math.cos(this.firearm.rotation) * 50;
+        this.firearm.y += Math.sin(this.firearm.rotation) * 50;
+        
         
         var garbageDump = this.garbageDump;
         
