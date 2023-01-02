@@ -15,6 +15,7 @@ class Arena extends Phaser.Scene {
         this.load.image("floorTransparent", "assets/image/floor_transparent.png");
         this.load.audio("blast", "assets/sounds/shot.wav");
         this.load.audio("jump", "assets/sounds/jump.wav");
+        this.load.audio("enemyKill", "assets/sounds/enemyKill.wav");
     }
 
     create() {
@@ -61,12 +62,16 @@ class Arena extends Phaser.Scene {
         this.physics.add.overlap(this.projectiles, this.anteaters, function(projectile, enemy) {
             this.garbageDump.push(projectile);
             this.garbageDump.push(enemy);
+            var sound = this.sound.add("enemyKill");
+            sound.play();
         }.bind(this), null, this);
         
         this.physics.add.overlap(this.player, this.anteaters, function(player, enemy) {
             if (player.body.velocity.y > 100) {
                 this.garbageDump.push(enemy);
                 this.player.setVelocityY(-333);
+                var sound = this.sound.add("enemyKill");
+                sound.play();
             }
             else {
                 this.scene.pause();
