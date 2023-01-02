@@ -189,6 +189,11 @@ class Arena extends Phaser.Scene {
             console.log("anyeater");
             anteater.flipX = true;
             anteater.setVelocityX(-100);
+            if (Math.random() > 0.6) {
+                anteater.flipX = false;
+                anteater.x = 61;
+                anteater.setVelocityX(100);
+            }
             anteater.setScale(2);
             anteater.setGravityY(1200);
             anteater.setCollideWorldBounds(true);
