@@ -34,7 +34,7 @@ class Arena extends Phaser.Scene {
         this.player.setScale(2);
         this.player.setGravityY(1200);
         this.player.setDragX(543.21);
-        this.player.setDragY(333);
+        this.player.setDragY(300);
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.floor, this.player);
         
