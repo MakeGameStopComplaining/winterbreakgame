@@ -64,6 +64,7 @@ class Arena extends Phaser.Scene {
             this.garbageDump.push(enemy);
             var sound = this.sound.add("enemyKill");
             sound.play();
+            this.playerScore++;
         }.bind(this), null, this);
         
         this.physics.add.overlap(this.player, this.anteaters, function(player, enemy) {
@@ -72,6 +73,7 @@ class Arena extends Phaser.Scene {
                 this.player.setVelocityY(-333);
                 var sound = this.sound.add("enemyKill");
                 sound.play();
+                this.playerScore += 3;
             }
             else {
                 this.scene.pause();
@@ -148,6 +150,9 @@ class Arena extends Phaser.Scene {
             repeat: -1
         });
         
+        this.playerScore = 0;
+        this.scoreDisplay = this.add.text(100, 100, "SCORE: 0", { color: "white", stroke: "black", strokeThickness: 5 });
+        
     }
 
     update() {
@@ -222,6 +227,8 @@ class Arena extends Phaser.Scene {
             anteater.setGravityY(1200);
             anteater.setCollideWorldBounds(true);
         }
+            this.scoreDisplay.setText("SCORE: " + this.playerScore.toString());
+
     }
 
 }
