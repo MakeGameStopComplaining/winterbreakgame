@@ -14,6 +14,7 @@ class Arena extends Phaser.Scene {
         this.load.image("forestBG", "assets/image/forest_background.png");
         this.load.image("floorTransparent", "assets/image/floor_transparent.png");
         this.load.audio("blast", "assets/sounds/shot.wav");
+        this.load.audio("jump", "assets/sounds/jump.wav");
     }
 
     create() {
@@ -153,6 +154,8 @@ class Arena extends Phaser.Scene {
         }
         if (Phaser.Input.Keyboard.JustDown(this.buttons.w)) {
             this.player.setVelocityY(-543.21);
+            var sound = this.sound.add("jump");
+            sound.play();
         }
         /* (this.cursors.down.isDown) {
             this.player.body.y+=10;
