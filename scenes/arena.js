@@ -17,6 +17,7 @@ class Arena extends Phaser.Scene {
         this.load.audio("jump", "assets/sounds/jump.wav");
         this.load.audio("enemyKill", "assets/sounds/enemyKill.wav");
         this.load.audio("levelFail", "assets/sounds/gameOver.wav");
+        this.load.audio("mainTheme", "assets/sounds/ant song.wav");
     }
 
     create() {
@@ -160,6 +161,9 @@ class Arena extends Phaser.Scene {
         this.playerScore = 0;
         this.scoreDisplay = this.add.text(100, 100, "SCORE: 0", { color: "white", stroke: "black", strokeThickness: 5 });
         
+        this.mainTheme = this.sound.add("mainTheme");
+        this.mainTheme.loop = true;
+        this.mainTheme.play();
     }
 
     update() {
