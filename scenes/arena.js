@@ -16,6 +16,7 @@ class Arena extends Phaser.Scene {
         this.load.audio("blast", "assets/sounds/shot.wav");
         this.load.audio("jump", "assets/sounds/jump.wav");
         this.load.audio("enemyKill", "assets/sounds/enemyKill.wav");
+        this.load.audio("levelFail", "assets/sounds/gameOver.wav");
     }
 
     create() {
@@ -77,11 +78,17 @@ class Arena extends Phaser.Scene {
             }
             else {
                 this.scene.pause();
+                var sound = this.sound.add("levelFail");
+                sound.play();
+                alert("loser");
             }
         }.bind(this), null, this);
         
         this.physics.add.overlap(this.fortress, this.anteaters, function(hill, enemy) {
             this.scene.pause();
+            var sound = this.sound.add("levelFail");
+            sound.play();
+            alert("loser");
         }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
