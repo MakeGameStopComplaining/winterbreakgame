@@ -7,12 +7,16 @@ class Arena extends Phaser.Scene {
     preload() {
         this.load.spritesheet("ant", "assets/image/gun_base.png", { frameWidth: 37, frameHeight: 50 });
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
+        this.load.spritesheet("anteaterUltra", "assets/image/anteater_military.png", { frameWidth: 60, frameHeight: 29 });
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet("maxim", "assets/image/ant_gun.png", { frameWidth: 96, frameHeight: 32 });
         this.load.spritesheet("ball", "assets/image/bullet_ant.png", { frameWidth: 16, frameHeight: 8 });
         this.load.image("forestBG", "assets/image/forest_background.png");
         this.load.image("floorTransparent", "assets/image/floor_transparent.png");
         this.load.audio("blast", "assets/sounds/shot.wav");
+        this.load.audio("jump", "assets/sounds/jump.wav");
+        this.load.audio("enemyKill", "assets/sounds/enemyKill.wav");
+        this.load.audio("levelFail", "assets/sounds/gameOver.wav");
     }
 
     create() {
@@ -39,7 +43,7 @@ class Arena extends Phaser.Scene {
         this.physics.add.collider(this.anteaters, this.floor);
 
         
-        this.fortress = this.physics.add.sprite(200, 200, "antHill");
+        this.fortress = this.physics.add.sprite(480, 200, "antHill");
         this.fortress.setScale(2);
         this.fortress.setCollideWorldBounds(true);
         this.fortress.setGravityY(1200);
@@ -59,6 +63,32 @@ class Arena extends Phaser.Scene {
         this.physics.add.overlap(this.projectiles, this.anteaters, function(projectile, enemy) {
             this.garbageDump.push(projectile);
             this.garbageDump.push(enemy);
+            var sound = this.sound.add("enemyKill");
+            sound.play();
+            this.playerScore++;
+        }.bind(this), null, this);
+        
+        this.physics.add.overlap(this.player, this.anteaters, function(player, enemy) {
+            if (player.body.velocity.y > 100) {
+                this.garbageDump.push(enemy);
+                this.player.setVelocityY(-333);
+                var sound = this.sound.add("enemyKill");
+                sound.play();
+                this.playerScore += 3;
+            }
+            else {
+                this.scene.pause();
+                var sound = this.sound.add("levelFail");
+                sound.play();
+                alert("loser");
+            }
+        }.bind(this), null, this);
+        
+        this.physics.add.overlap(this.fortress, this.anteaters, function(hill, enemy) {
+            this.scene.pause();
+            var sound = this.sound.add("levelFail");
+            sound.play();
+            alert("loser");
         }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -119,6 +149,16 @@ class Arena extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
+        this.anims.create({
+            key: "anteaterUltraWalk",
+            frames: this.anims.generateFrameNumbers("anteaterUltra",
+                {start: 0, end: 3}),
+            frameRate: 8,
+            repeat: -1
+        });
+        
+        this.playerScore = 0;
+        this.scoreDisplay = this.add.text(100, 100, "SCORE: 0", { color: "white", stroke: "black", strokeThickness: 5 });
         
     }
 
@@ -129,8 +169,10 @@ class Arena extends Phaser.Scene {
         if (this.buttons.d.isDown) {
             this.player.setVelocityX(333);
         }
-        if (Phaser.Input.Keyboard.JustDown(this.buttons.w)) {
+        if (Phaser.Input.Keyboard.JustDown(this.buttons.w) && this.player.body.blocked.down) {
             this.player.setVelocityY(-543.21);
+            var sound = this.sound.add("jump");
+            sound.play();
         }
         /* (this.cursors.down.isDown) {
             this.player.body.y+=10;
@@ -179,10 +221,21 @@ class Arena extends Phaser.Scene {
             console.log("anyeater");
             anteater.flipX = true;
             anteater.setVelocityX(-100);
+            if (Math.random() > 0.6) {
+                anteater.flipX = false;
+                anteater.x = 61;
+                anteater.setVelocityX(100);
+            }
+            if (Math.random() > 0.8) {
+                anteater.setVelocityX(anteater.body.velocity.x * 1.23);
+                anteater.play("anteaterUltraWalk", true);
+            }
             anteater.setScale(2);
             anteater.setGravityY(1200);
             anteater.setCollideWorldBounds(true);
         }
+            this.scoreDisplay.setText("SCORE: " + this.playerScore.toString());
+
     }
 
 }
