@@ -82,6 +82,8 @@ class Arena extends Phaser.Scene {
                 var sound = this.sound.add("levelFail");
                 sound.play();
                 this.mainTheme.pause();
+                var restartButton = confirm("loser\n\n\tPress OK to restar t");
+                if (restartButton) this.scene.start("arena");
             }
         }.bind(this), null, this);
         
@@ -90,6 +92,8 @@ class Arena extends Phaser.Scene {
             var sound = this.sound.add("levelFail");
             sound.play();
             this.mainTheme.pause();
+            var restartButton = confirm("loser\n\n\tPress OK to restar t");
+            if (restartButton) this.scene.start("arena");
         }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
