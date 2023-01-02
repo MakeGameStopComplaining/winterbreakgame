@@ -7,6 +7,7 @@ class Arena extends Phaser.Scene {
     preload() {
         this.load.spritesheet("ant", "assets/image/gun_base.png", { frameWidth: 37, frameHeight: 50 });
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
+        this.load.spritesheet("anteaterUltra", "assets/image/anteater_military.png", { frameWidth: 60, frameHeight: 29 });
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet("maxim", "assets/image/ant_gun.png", { frameWidth: 96, frameHeight: 32 });
         this.load.spritesheet("ball", "assets/image/bullet_ant.png", { frameWidth: 16, frameHeight: 8 });
@@ -133,6 +134,13 @@ class Arena extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
+        this.anims.create({
+            key: "anteaterUltraWalk",
+            frames: this.anims.generateFrameNumbers("anteaterUltra",
+                {start: 0, end: 3}),
+            frameRate: 8,
+            repeat: -1
+        });
         
     }
 
@@ -197,6 +205,10 @@ class Arena extends Phaser.Scene {
                 anteater.flipX = false;
                 anteater.x = 61;
                 anteater.setVelocityX(100);
+            }
+            if (Math.random() > 0.8) {
+                anteater.setVelocityX(anteater.body.velocity.x * 1.23);
+                anteater.play("anteaterUltraWalk", true);
             }
             anteater.setScale(2);
             anteater.setGravityY(1200);
