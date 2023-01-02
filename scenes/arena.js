@@ -10,15 +10,20 @@ class Arena extends Phaser.Scene {
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet("maxim", "assets/image/ant_gun.png", { frameWidth: 96, frameHeight: 32 });
         this.load.spritesheet("ball", "assets/image/bullet_ant.png", { frameWidth: 16, frameHeight: 8 });
+        this.load.image("forestBG", "assets/image/forest_background.png");
+        this.load.image("floorTransparent", "assets/image/floor_transparent.png");
         this.load.audio("blast", "assets/sounds/shot.wav");
     }
 
     create() {
         this.sound.stopAll();
         
-        var graphics = this.add.graphics();
-        graphics.fillGradientStyle(0x00d8ff, 0x00d8ff, 0x003ebd, 0x003ebd, 1);
-        graphics.fillRect(0, 0, 960, 540);
+        var bg = this.add.image(480, 270, "forestBG");
+        bg.setScale(3.5);
+        
+        this.floor = this.physics.add.sprite(480, 454, "floorTransparent");
+        this.floor.setCollideWorldBounds(true);
+
         
         this.player = this.physics.add.sprite(69, -69, "ant");
         this.player.setScale(2);
@@ -26,15 +31,19 @@ class Arena extends Phaser.Scene {
         this.player.setDragX(543.21);
         this.player.setDragY(333);
         this.player.setCollideWorldBounds(true);
+        this.physics.add.collider(this.floor, this.player);
         
         this.projectiles = this.physics.add.group();
         
         this.anteaters = this.physics.add.group();
+        this.physics.add.collider(this.anteaters, this.floor);
+
         
         this.fortress = this.physics.add.sprite(100, 200, "antHill");
         this.fortress.setScale(2);
         this.fortress.setCollideWorldBounds(true);
         this.fortress.setGravityY(1200);
+        this.physics.add.collider(this.fortress, this.floor);
         
         this.firearm = this.physics.add.sprite(this.player.x, this.player.y, "maxim");
         this.firearm.setScale(2);
@@ -154,6 +163,8 @@ class Arena extends Phaser.Scene {
         this.firearm.x += Math.cos(this.firearm.rotation) * 50;
         this.firearm.y += Math.sin(this.firearm.rotation) * 50;
         
+        this.floor.setVelocityY(0);
+        
         
         var garbageDump = this.garbageDump;
         
@@ -162,7 +173,7 @@ class Arena extends Phaser.Scene {
         }
         
         if (this.internalClock % 180 == 0) {
-            var anteater = this.anteaters.create(810, 500, "anteater");
+            var anteater = this.anteaters.create(810, 100, "anteater");
             anteater.play("anteaterWalk", true);
             console.log("anyeater");
             anteater.flipX = true;
