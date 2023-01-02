@@ -17,6 +17,7 @@ class Arena extends Phaser.Scene {
         this.load.audio("jump", "assets/sounds/jump.wav");
         this.load.audio("enemyKill", "assets/sounds/enemyKill.wav");
         this.load.audio("levelFail", "assets/sounds/gameOver.wav");
+        this.load.audio("mainTheme", "assets/sounds/ant song.wav");
     }
 
     create() {
@@ -33,7 +34,7 @@ class Arena extends Phaser.Scene {
         this.player.setScale(2);
         this.player.setGravityY(1200);
         this.player.setDragX(543.21);
-        this.player.setDragY(333);
+        this.player.setDragY(300);
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.floor, this.player);
         
@@ -80,7 +81,9 @@ class Arena extends Phaser.Scene {
                 this.scene.pause();
                 var sound = this.sound.add("levelFail");
                 sound.play();
-                alert("loser");
+                this.mainTheme.pause();
+                var restartButton = confirm("loser\n\n\tPress OK to restar t");
+                if (restartButton) this.scene.start("arena");
             }
         }.bind(this), null, this);
         
@@ -88,7 +91,9 @@ class Arena extends Phaser.Scene {
             this.scene.pause();
             var sound = this.sound.add("levelFail");
             sound.play();
-            alert("loser");
+            this.mainTheme.pause();
+            var restartButton = confirm("loser\n\n\tPress OK to restar t");
+            if (restartButton) this.scene.start("arena");
         }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -160,6 +165,9 @@ class Arena extends Phaser.Scene {
         this.playerScore = 0;
         this.scoreDisplay = this.add.text(100, 100, "SCORE: 0", { color: "white", stroke: "black", strokeThickness: 5 });
         
+        this.mainTheme = this.sound.add("mainTheme");
+        this.mainTheme.loop = true;
+        this.mainTheme.play();
     }
 
     update() {
@@ -194,6 +202,7 @@ class Arena extends Phaser.Scene {
             var sound = this.sound.add("blast");
             sound.play();
             this.firearm.play("fire", false);
+            this.player.body.velocity.x += (this.player.flipX?-1:1) * 123;
         }
         else if (!this.clicka.isDown) {
             this.canClick = true;
@@ -215,7 +224,7 @@ class Arena extends Phaser.Scene {
             garbageDump.pop().destroy();
         }
         
-        if (this.internalClock % 180 == 0) {
+        if (this.internalClock % (180 - Math.floor(this.internalClock / 600)) == 0) {
             var anteater = this.anteaters.create(899, 30, "anteater");
             anteater.play("anteaterWalk", true);
             console.log("anyeater");
