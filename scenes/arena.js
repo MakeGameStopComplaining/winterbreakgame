@@ -39,7 +39,7 @@ class Arena extends Phaser.Scene {
         this.physics.add.collider(this.anteaters, this.floor);
 
         
-        this.fortress = this.physics.add.sprite(200, 200, "antHill");
+        this.fortress = this.physics.add.sprite(480, 200, "antHill");
         this.fortress.setScale(2);
         this.fortress.setCollideWorldBounds(true);
         this.fortress.setGravityY(1200);
@@ -69,6 +69,10 @@ class Arena extends Phaser.Scene {
             else {
                 this.scene.pause();
             }
+        }.bind(this), null, this);
+        
+        this.physics.add.overlap(this.fortress, this.anteaters, function(hill, enemy) {
+            this.scene.pause();
         }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
