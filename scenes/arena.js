@@ -9,6 +9,7 @@ class Arena extends Phaser.Scene {
         this.load.spritesheet("anteater", "assets/image/anteater.png", { frameWidth: 60, frameHeight: 29 });
         this.load.spritesheet("antHill", "assets/image/anthill.png", { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet("maxim", "assets/image/ant_gun.png", { frameWidth: 96, frameHeight: 32 });
+        this.load.spritesheet("ball", "assets/image/bullet_ant.png", { frameWidth: 16, frameHeight: 8 });
         this.load.audio("blast", "assets/sounds/shot.wav");
     }
 
@@ -101,6 +102,13 @@ class Arena extends Phaser.Scene {
         this.firearm.on("animationcomplete", function() {
             this.setTexture("maxim", 0);
         });
+        this.anims.create({
+            key: "flyingAnt",
+            frames: this.anims.generateFrameNumbers("ball",
+                {start: 0, end: 1}),
+            frameRate: 8,
+            repeat: -1
+        });
         
     }
 
@@ -125,9 +133,11 @@ class Arena extends Phaser.Scene {
         if (this.clicka.isDown && this.canClick) {
             this.canClick = false;
             var ball = this.projectiles.create(this.player.x, this.player.y, "ball");
+            ball.setScale(2);
             ball.rotation = Math.atan2(this.clicka.y - this.player.y, relClickX - this.player.x);
             ball.setVelocityX(Math.cos(ball.rotation) * 1000);
             ball.setVelocityY(Math.sin(ball.rotation) * 1000);
+            ball.play("flyingAnt", true);
             console.log("ball");
             var sound = this.sound.add("blast");
             sound.play();
