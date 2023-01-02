@@ -105,12 +105,13 @@ class Arena extends Phaser.Scene {
             key: "fire",
             frames: this.anims.generateFrameNumbers("maxim",
                 {start: 0, end: 4}),
-            frameRate: 8,
+            frameRate: 24,
             repeat: 0
         });
         this.firearm.on("animationcomplete", function() {
-            this.setTexture("maxim", 0);
-        });
+            this.firearm.setTexture("maxim", 0);
+            this.canClick = true;
+        }.bind(this));
         this.anims.create({
             key: "flyingAnt",
             frames: this.anims.generateFrameNumbers("ball",
