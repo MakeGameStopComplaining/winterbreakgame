@@ -202,6 +202,7 @@ class Arena extends Phaser.Scene {
             var sound = this.sound.add("blast");
             sound.play();
             this.firearm.play("fire", false);
+            this.player.body.velocity.x += (this.player.flipX?-1:1) * 123;
         }
         else if (!this.clicka.isDown) {
             this.canClick = true;
@@ -223,7 +224,7 @@ class Arena extends Phaser.Scene {
             garbageDump.pop().destroy();
         }
         
-        if (this.internalClock % 180 == 0) {
+        if (this.internalClock % (180 - Math.floor(this.internalClock / 600)) == 0) {
             var anteater = this.anteaters.create(899, 30, "anteater");
             anteater.play("anteaterWalk", true);
             console.log("anyeater");
