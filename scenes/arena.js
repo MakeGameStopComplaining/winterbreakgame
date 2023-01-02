@@ -81,7 +81,7 @@ class Arena extends Phaser.Scene {
                 this.scene.pause();
                 var sound = this.sound.add("levelFail");
                 sound.play();
-                alert("loser");
+                this.mainTheme.pause();
             }
         }.bind(this), null, this);
         
@@ -89,7 +89,7 @@ class Arena extends Phaser.Scene {
             this.scene.pause();
             var sound = this.sound.add("levelFail");
             sound.play();
-            alert("loser");
+            this.mainTheme.pause();
         }.bind(this), null, this);
         
         this.cursors = this.input.keyboard.createCursorKeys();
